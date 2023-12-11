@@ -1,0 +1,26 @@
+/*
+ * servo_defines.h
+ *
+ *  Created on: Dec 11, 2023
+ *      Author: adamc
+ */
+
+#ifndef INC_SERVO_DEFINES_H_
+#define INC_SERVO_DEFINES_H_
+
+#define SERVO_POSITION_RESOLUTION 4095
+#define SERVO_ANGEL_POSITION_RANGE_MAX 360.0
+#define SERVO_ANGEL_POSITION_RANGE_MIN 0.0
+#define SERVO_RAW_POSITION_MAX 4095
+#define SERVO_RAW_POSITION_MIN 1
+
+#define SERVO_FRAME_HEADER 0xff // 255 = 0xff
+#define SERVO_FRAME_WRITE 0x03
+#define SERVO_REG_ACCELERATION 0x29
+#define SERVO_POSITION_INVALID1 1023
+#define SERVO_POSITION_INVALID2 3071
+
+
+
+
+#endif /* INC_SERVO_DEFINES_H_ */

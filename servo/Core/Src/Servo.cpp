@@ -18,14 +18,13 @@ Servo::~Servo() {
 void Servo::set_position(double _cmd_pos_degree, double _vel, double _acc )
 {
     uint8_t frame[14];
-    frame[0] = 0xff;
-    frame[1] = 0xff;
+    frame[0] = SERVO_FRAME_HEADER;
+    frame[1] = SERVO_FRAME_HEADER;
     frame[2] = id;
     frame[3] = 0x0a; // packet len
-    frame[4] = 0x03; // instruction
+    frame[4] = SERVO_FRAME_WRITE; // instruction
     frame[5] = 0x29; // reg address
-    frame[6] = 254; // acceleration
-
+    frame[6] = SERVO_FRAME_WRITE; // acceleration
 
     frame[7] = degrees_to_raw(_cmd_pos_degree);
     frame[8] = ( degrees_to_raw(_cmd_pos_degree) >> 8 );
@@ -49,6 +48,40 @@ uint8_t Servo::calculate_checksum(uint8_t len, uint8_t frame[]) {
 
 uint16_t Servo::degrees_to_raw(const double _degree)
 {
-    uint16_t raw = uint16_t( _degree * 4096.0 / 360.0 );
-    return raw;
+    uint16_t raw_position = uint16_t( _degree * SERVO_POSITION_RESOLUTION / SERVO_ANGEL_POSITION_RANGE_MAX );
+
+    check_limits(raw_position);
+
+
+    return raw_position;
 }
+
+void Servo::check_limits(uint16_t& _raw_position)
+{
+	if( _raw_position > SERVO_RAW_POSITION_MAX)
+	{
+		_raw_position = SERVO_RAW_POSITION_MAX;
+	}
+	else if( _raw_position < SERVO_RAW_POSITION_MIN)
+	{
+		_raw_position < SERVO_RAW_POSITION_MIN;
+	}
+	else if(_raw_position == SERVO_POSITION_INVALID1)
+		{
+			_raw_position--;
+		}
+
+	else if(_raw_position == SERVO_POSITION_INVALID2)
+		{
+			_raw_position--;
+		}
+}
+
+
+
+
+
+
+
+
+

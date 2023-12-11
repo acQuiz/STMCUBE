@@ -25,7 +25,8 @@ Core/Src/Servo.o: ../Core/Src/Servo.cpp ../Core/Inc/Servo.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Core/Inc/servo_defines.h
 ../Core/Inc/Servo.h:
 ../Core/Inc/MCU.h:
 ../Core/Inc/main.h:
@@ -55,3 +56,4 @@ Core/Src/Servo.o: ../Core/Src/Servo.cpp ../Core/Inc/Servo.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Core/Inc/servo_defines.h:

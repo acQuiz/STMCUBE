@@ -9,6 +9,7 @@
 #define SERVO_H_
 
 #include "MCU.h"
+#include "servo_defines.h"
 
 class Servo {
 private:
@@ -21,7 +22,7 @@ public:
 private:
 	uint8_t calculate_checksum(uint8_t len, uint8_t frame[]);
 	uint16_t degrees_to_raw(const double _degree);
-
+	void check_limits(uint16_t& _raw_position);
 };
 
 #endif /* SERVO_H_ */
