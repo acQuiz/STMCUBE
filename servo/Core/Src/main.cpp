@@ -98,7 +98,7 @@ int main(void)
   while (1)
   {
 	/* USER CODE END WHILE */
-	  servo.set_position(0.0, 5, 5);
+	  servo.set_position(0.0, 10, 10);
 	  HAL_Delay(6000);
 	  servo.set_position(400, 5, 5);
 	  HAL_Delay(4000);
