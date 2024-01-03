@@ -15,5 +15,7 @@ extern UART_HandleTypeDef huart5;
 
 void mcu_uart5_transmit(const uint8_t* const frame, uint8_t length);
 
+//void mcu_uart5_reciver();
+
 
 #endif /* MCU_H_ */

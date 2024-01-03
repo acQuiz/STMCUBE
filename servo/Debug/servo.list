@@ -700,20 +700,29 @@ Disassembly of section .text:
  800094e:	bf00      	nop
 
 08000950 <_Z18mcu_uart5_transmitPKhh>:
+ *  Created on: Nov 30, 2023
+ *      Author: bogda
+ */
+#include "MCU.h"
+
+void mcu_uart5_transmit(const uint8_t* const frame, uint8_t length){
  8000950:	b580      	push	{r7, lr}
  8000952:	b082      	sub	sp, #8
  8000954:	af00      	add	r7, sp, #0
  8000956:	6078      	str	r0, [r7, #4]
  8000958:	460b      	mov	r3, r1
  800095a:	70fb      	strb	r3, [r7, #3]
+	HAL_HalfDuplex_EnableTransmitter( &huart5 );
  800095c:	4806      	ldr	r0, [pc, #24]	; (8000978 <_Z18mcu_uart5_transmitPKhh+0x28>)
  800095e:	f001 fc3e 	bl	80021de <HAL_HalfDuplex_EnableTransmitter>
+	HAL_UART_Transmit(&huart5, frame, length, 2);
  8000962:	78fb      	ldrb	r3, [r7, #3]
  8000964:	b29a      	uxth	r2, r3
  8000966:	2302      	movs	r3, #2
  8000968:	6879      	ldr	r1, [r7, #4]
  800096a:	4803      	ldr	r0, [pc, #12]	; (8000978 <_Z18mcu_uart5_transmitPKhh+0x28>)
  800096c:	f001 fba5 	bl	80020ba <HAL_UART_Transmit>
+}
  8000970:	bf00      	nop
  8000972:	3708      	adds	r7, #8
  8000974:	46bd      	mov	sp, r7
@@ -1148,36 +1157,37 @@ int main(void)
   while (1)
   {
 	/* USER CODE END WHILE */
-	  servo.set_position(0.0, 10, 10);
+	  servo.set_position(400, 5, 300);
  8000c28:	463b      	mov	r3, r7
  8000c2a:	ed9f 2b0f 	vldr	d2, [pc, #60]	; 8000c68 <main+0x60>
- 8000c2e:	ed9f 1b0e 	vldr	d1, [pc, #56]	; 8000c68 <main+0x60>
- 8000c32:	ed9f 0b0f 	vldr	d0, [pc, #60]	; 8000c70 <main+0x68>
+ 8000c2e:	ed9f 1b10 	vldr	d1, [pc, #64]	; 8000c70 <main+0x68>
+ 8000c32:	ed9f 0b11 	vldr	d0, [pc, #68]	; 8000c78 <main+0x70>
  8000c36:	4618      	mov	r0, r3
  8000c38:	f7ff fed6 	bl	80009e8 <_ZN5Servo12set_positionEddd>
-	  HAL_Delay(6000);
- 8000c3c:	f241 7070 	movw	r0, #6000	; 0x1770
+	  HAL_Delay(9000);
+ 8000c3c:	f242 3028 	movw	r0, #9000	; 0x2328
  8000c40:	f000 fa48 	bl	80010d4 <HAL_Delay>
-	  servo.set_position(400, 5, 5);
+	  servo.set_position(0, 5, 5);
  8000c44:	463b      	mov	r3, r7
- 8000c46:	ed9f 2b0c 	vldr	d2, [pc, #48]	; 8000c78 <main+0x70>
- 8000c4a:	ed9f 1b0b 	vldr	d1, [pc, #44]	; 8000c78 <main+0x70>
+ 8000c46:	ed9f 2b0a 	vldr	d2, [pc, #40]	; 8000c70 <main+0x68>
+ 8000c4a:	ed9f 1b09 	vldr	d1, [pc, #36]	; 8000c70 <main+0x68>
  8000c4e:	ed9f 0b0c 	vldr	d0, [pc, #48]	; 8000c80 <main+0x78>
  8000c52:	4618      	mov	r0, r3
  8000c54:	f7ff fec8 	bl	80009e8 <_ZN5Servo12set_positionEddd>
-	  HAL_Delay(4000);
- 8000c58:	f44f 607a 	mov.w	r0, #4000	; 0xfa0
+	  HAL_Delay(9000);
+ 8000c58:	f242 3028 	movw	r0, #9000	; 0x2328
  8000c5c:	f000 fa3a 	bl	80010d4 <HAL_Delay>
-	  servo.set_position(0.0, 10, 10);
+	  servo.set_position(400, 5, 300);
  8000c60:	e7e2      	b.n	8000c28 <main+0x20>
  8000c62:	bf00      	nop
  8000c64:	f3af 8000 	nop.w
  8000c68:	00000000 	.word	0x00000000
- 8000c6c:	40240000 	.word	0x40240000
+ 8000c6c:	4072c000 	.word	0x4072c000
+ 8000c70:	00000000 	.word	0x00000000
+ 8000c74:	40140000 	.word	0x40140000
+ 8000c78:	00000000 	.word	0x00000000
+ 8000c7c:	40790000 	.word	0x40790000
 	...
- 8000c7c:	40140000 	.word	0x40140000
- 8000c80:	00000000 	.word	0x00000000
- 8000c84:	40790000 	.word	0x40790000
 
 08000c88 <_Z18SystemClock_Configv>:
 /**
