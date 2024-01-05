@@ -2,7 +2,7 @@
  * servo.cpp
  *
  *  Created on: Nov 30, 2023
- *      Author: bogda
+ *      Author: adamc
  */
 
 #include "Servo.h"
@@ -76,27 +76,26 @@ void Servo::check_limits(uint16_t& _raw_position)
 		}
 }
 
-//void Servo::set_memory(const uint8_t* _data, const uint8_t_length)
-//{
-//	uint8_t frame_length = _data_length + 7;
-//
-//	uint8_t* frame = new uint8_t[frame_length];
-//	frame[0] = SERVO_FRAME_HEADER;
-//	frame[1] = SERVO_FRAME_HEADER;
-//	frame[2] = id;
-//	frame[3] = SERVO_FRAME_WRITE;
-//	frame[4] = _data_lenght + 3;// packet lenght
-//	//frame[5] =
-//
-//	for(int i = 0 ; i < frame_lenght ; i++)
-//	{
-//		frame[i+6] = _data[i];
-//	}
-//	frame[frame_length -1]= calculate_checksum(frame_length,frame);
-//	mcu_uart5_transmit(frame, frame_length);
-//
-//
-//}
+void Servo::set_memory(const uint8_t* _data, const uint8_t _data_length)
+{
+	uint8_t frame_length = _data_length + 7;
+
+	uint8_t* frame = new uint8_t[frame_length];
+	frame[0] = SERVO_FRAME_HEADER;
+	frame[1] = SERVO_FRAME_HEADER;
+	frame[2] = id;
+	frame[3] = SERVO_FRAME_WRITE;
+	frame[4] = _data_length + 3;// packet length
+	frame[5] = static_cast<uint8_t>(ServoMemoryAddress::acceleration);
+
+	for(int i = 0 ; i < frame_length ; i++)
+	{
+		frame[i+6] = _data[i];
+	}
+	frame[frame_length -1]= calculate_checksum(frame_length,frame);
+	mcu_uart5_transmit(frame, frame_length);
+}
+
 uint16_t Servo::acc_to_raw(const double _acc)
 {
     uint16_t _raw_acc = uint16_t(_acc);

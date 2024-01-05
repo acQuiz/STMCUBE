@@ -13,7 +13,7 @@
 
 class Servo {
 
-	enum class ServoMemeoryAddress{
+	enum class ServoMemoryAddress{
 		Firmware_sub_version_number	=	1,
 		servo_Main_Version_Number	=	3,
 		servo_sub_version_number	=	4,
