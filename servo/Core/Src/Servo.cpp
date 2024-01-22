@@ -40,6 +40,21 @@ void Servo::set_position(double _cmd_pos_degree, double _vel, double _acc )
 //    mcu_uart5_transmit(frame, 14);
 }
 
+void Servo::set_P(uint8_t _value){
+	Frame data = _value;
+	set_memory( data, ServoMemoryAddress::P_Proportionality_coefficient);
+}
+
+void Servo::set_I(uint8_t _value){
+	Frame data = _value;
+	set_memory( data, ServoMemoryAddress::I_Integral_coefficient);
+}
+
+void Servo::set_D(uint8_t _value){
+	Frame data = _value;
+	set_memory( data, ServoMemoryAddress::D_Differential_coefficient);
+}
+
 uint8_t Servo::calculate_checksum(const Frame& _frame) {
 	uint8_t checksum = 0;
 	for(size_t i = 2; i< _frame.size() - 1; i++) {
@@ -92,8 +107,9 @@ void Servo::set_memory(const Frame& _data, const ServoMemoryAddress _address)
 	frame.push_back( id );
 	frame.push_back( SERVO_FRAME_WRITE );
 	frame.push_back( _data.size() + 3 );// packet length
-	frame.push_back( static_cast<uint8_t>(ServoMemoryAddress::acceleration) );
-	for( auto& byte : _data)
+	frame.push_back( (uint8_t) _address );
+
+	for( auto& byte : _frame)
 	{
 		frame.push_back( byte );
 	}
@@ -108,7 +124,7 @@ void Servo::set_memory(const Frame& _data, const ServoMemoryAddress _address)
 	frame.push_back( calculate_checksum( frame ) );
 	mcu_uart5_transmit( frame.data(), frame.size() );
 
-	for( const auto& byte : _frame )
+	for( const auto& byte : _data )
 	{
 		println("%d", byte);
 	}
