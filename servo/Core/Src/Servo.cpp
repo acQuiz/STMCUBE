@@ -27,9 +27,9 @@ void Servo::set_position(double _cmd_pos_degree, double _vel, double _acc )
 //    frame[3] = 0x0a; // packet len
 //    frame[4] = SERVO_FRAME_WRITE; // instruction
 //    frame[5] = 0x29; // reg address
-    frame.push_back( 254 ); // acceleration
-    frame.push_back( degrees_to_raw(_cmd_pos_degree) );
-    frame.push_back( degrees_to_raw(_cmd_pos_degree) >> 8 );
+    frame.push_back( acc_to_raw( _acc ) ); // acceleration
+    frame.push_back( degrees_to_raw( _cmd_pos_degree ) );
+    frame.push_back( degrees_to_raw( _cmd_pos_degree ) >> 8 );
     frame.push_back( 0x00 );
     frame.push_back( 0x00 );
     frame.push_back( (uint8_t)8000 );
@@ -116,9 +116,9 @@ void Servo::set_memory(const Frame& _data, const ServoMemoryAddress _address)
 
 uint16_t Servo::acc_to_raw(const double _acc)
 {
-    uint16_t _raw_acc = uint16_t(_acc);
+	int _acc_int = int(_acc)*29.013;
+    uint16_t _raw_acc = uint16_t(_acc_int);
     check_limits_acceleration(_raw_acc);
-
 
     return _raw_acc;
 }

@@ -4,17 +4,17 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-CPP_SRCS += \
-../Core/Src/MCU.cpp \
-../Core/Src/Servo.cpp \
-../Core/Src/main.cpp 
-
 C_SRCS += \
 ../Core/Src/stm32f4xx_hal_msp.c \
 ../Core/Src/stm32f4xx_it.c \
 ../Core/Src/syscalls.c \
 ../Core/Src/sysmem.c \
 ../Core/Src/system_stm32f4xx.c 
+
+CPP_SRCS += \
+../Core/Src/MCU.cpp \
+../Core/Src/Servo.cpp \
+../Core/Src/main.cpp 
 
 C_DEPS += \
 ./Core/Src/stm32f4xx_hal_msp.d \
