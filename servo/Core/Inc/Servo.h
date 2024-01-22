@@ -82,6 +82,9 @@ private:
 	void check_limits_acceleration(uint16_t& _acc);
 	void set_memory(const Frame& _data, const ServoMemoryAddress _address);
 	uint16_t acc_to_raw(const double _acc);
+	void set_P(uint8_t _value);
+	void set_I(uint8_t _value);
+	void set_D(uint8_t _value);
 };
 
 #endif /* SERVO_H_ */
