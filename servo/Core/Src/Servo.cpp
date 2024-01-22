@@ -17,29 +17,33 @@ Servo::~Servo() {
 
 void Servo::set_position(double _cmd_pos_degree, double _vel, double _acc )
 {
-    uint8_t frame[14];
-    frame[0] = SERVO_FRAME_HEADER;
-    frame[1] = SERVO_FRAME_HEADER;
-    frame[2] = id;
-    frame[3] = 0x0a; // packet len
-    frame[4] = SERVO_FRAME_WRITE; // instruction
-    frame[5] = 0x29; // reg address
-    frame[6] = acc_to_raw(_acc); // acceleration
-    frame[7] = degrees_to_raw(_cmd_pos_degree);
-    frame[8] = ( degrees_to_raw(_cmd_pos_degree) >> 8 );
-    frame[9] = 0x00;
-    frame[10] = 0x00;
-    frame[11] = 8000;
-    frame[12] = 8000 >> 8;
-    frame[13] = calculate_checksum(14, frame);
+	Frame frame;
+    //uint8_t frame[14];
 
-    mcu_uart5_transmit(frame, 14);
+
+//    frame[0] = SERVO_FRAME_HEADER;
+//    frame[1] = SERVO_FRAME_HEADER;
+//    frame[2] = id;
+//    frame[3] = 0x0a; // packet len
+//    frame[4] = SERVO_FRAME_WRITE; // instruction
+//    frame[5] = 0x29; // reg address
+    frame.push_back( 254 ); // acceleration
+    frame.push_back( degrees_to_raw(_cmd_pos_degree) );
+    frame.push_back( degrees_to_raw(_cmd_pos_degree) >> 8 );
+    frame.push_back( 0x00 );
+    frame.push_back( 0x00 );
+    frame.push_back( (uint8_t)8000 );
+    frame.push_back( 8000 >> 8 );
+    set_memory( frame, ServoMemoryAddress::acceleration );
+//    frame.push_back( calculate_checksum(14, frame) );
+//
+//    mcu_uart5_transmit(frame, 14);
 }
 
-uint8_t Servo::calculate_checksum(uint8_t len, uint8_t frame[]) {
+uint8_t Servo::calculate_checksum(const Frame& _frame) {
 	uint8_t checksum = 0;
-	for(int i = 2; i< len - 1; i++) {
-		checksum += frame[i];
+	for(size_t i = 2; i< _frame.size() - 1; i++) {
+		checksum += _frame[i];
 	}
 	checksum = ~(checksum);
 	return checksum;
@@ -76,24 +80,38 @@ void Servo::check_limits(uint16_t& _raw_position)
 		}
 }
 
-void Servo::set_memory(const uint8_t* _data, const uint8_t _data_length)
+void Servo::set_memory(const Frame& _data, const ServoMemoryAddress _address)
 {
-	uint8_t frame_length = _data_length + 7;
+	//uint8_t frame_length = _data.size() + 7;
+	Frame frame;
 
-	uint8_t* frame = new uint8_t[frame_length];
-	frame[0] = SERVO_FRAME_HEADER;
-	frame[1] = SERVO_FRAME_HEADER;
-	frame[2] = id;
-	frame[3] = SERVO_FRAME_WRITE;
-	frame[4] = _data_length + 3;// packet length
-	frame[5] = static_cast<uint8_t>(ServoMemoryAddress::acceleration);
 
-	for(int i = 0 ; i < frame_length ; i++)
+	//uint8_t* frame = new uint8_t[frame_length];
+	frame.push_back( SERVO_FRAME_HEADER );
+	frame.push_back( SERVO_FRAME_HEADER );
+	frame.push_back( id );
+	frame.push_back( SERVO_FRAME_WRITE );
+	frame.push_back( _data.size() + 3 );// packet length
+	frame.push_back( static_cast<uint8_t>(ServoMemoryAddress::acceleration) );
+	for( auto& byte : _data)
 	{
-		frame[i+6] = _data[i];
+		frame.push_back( byte );
 	}
-	frame[frame_length -1]= calculate_checksum(frame_length,frame);
-	mcu_uart5_transmit(frame, frame_length);
+
+	//std::copy( frame.end(), _data.begin(), _data.end() );
+	//frame.insert( (std::vector<uint8_t>) _data );
+
+//	for(int i = 0 ; i < frame_length ; i++)
+//	{
+//		frame[i+6] = _data[i];
+//	}
+	frame.push_back( calculate_checksum( frame ) );
+	mcu_uart5_transmit( frame.data(), frame.size() );
+
+	for( const auto& byte : _frame )
+	{
+		println("%d", byte);
+	}
 }
 
 uint16_t Servo::acc_to_raw(const double _acc)

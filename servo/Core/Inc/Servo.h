@@ -8,6 +8,8 @@
 #ifndef SERVO_H_
 #define SERVO_H_
 
+#include <vector>
+
 #include "MCU.h"
 #include "servo_defines.h"
 
@@ -63,6 +65,8 @@ class Servo {
 		Mobile_sign	=	0x42,
 		Current_current	=	0x45
 		};
+typedef std::vector<uint8_t> Frame;
+
 
 private:
 	uint8_t id;
@@ -72,11 +76,11 @@ public:
 	void set_position(double _cmd_pod_degree, double _vel, double _acc);
 
 private:
-	uint8_t calculate_checksum(uint8_t len, uint8_t frame[]);
+	uint8_t calculate_checksum(const Frame& _frame);
 	uint16_t degrees_to_raw(const double _degree);
 	void check_limits(uint16_t& _raw_position);
 	void check_limits_acceleration(uint16_t& _acc);
-	void set_memory(const uint8_t* _data, const uint8_t _data_length);
+	void set_memory(const Frame& _data, const ServoMemoryAddress _address);
 	uint16_t acc_to_raw(const double _acc);
 };
 
